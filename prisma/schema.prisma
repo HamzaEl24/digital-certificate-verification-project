@@ -1,0 +1,42 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Client {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  email           String          @unique
+  password        String
+  phone           String
+  status          String          // e.g., "active", "inactive"
+  type            String          // e.g., "Institution", "Société"
+  legalDocuments  LegalDocument[]
+  subscriptions   Subscription[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+model LegalDocument {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  documentName    String
+  url             String
+  uploadedAt      DateTime
+  validated       Boolean
+  clientId        String          @db.ObjectId
+  client          Client          @relation(fields: [clientId], references: [id])
+}
+
+model Subscription {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  type            String
+  startDate       DateTime
+  endDate         DateTime
+  clientId        String          @db.ObjectId
+  client          Client          @relation(fields: [clientId], references: [id])
+}
+
