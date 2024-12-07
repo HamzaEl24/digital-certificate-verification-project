@@ -16,14 +16,13 @@ export class AuthController {
       throw new BadRequestException(validation.message);
     }
 
-    // Génération et enregistrement du token
+    
     const tokenData = await this.authService.login(validation.client);
 
     return {
       message: 'Login successful',
       
-      token: tokenData.token,
-      client: tokenData.client,
+      token: tokenData,
     };
   }
 

@@ -7,6 +7,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { multerConfig } from './Client/Enregistrer/multer.config';
 import { RegisterModule } from './Client/Enregistrer/register.module';
 
+import { AdminAuthModule } from './Admin/AuthAdmin/auth.module'; 
+
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 @Module({
@@ -16,6 +18,7 @@ import { join } from 'path';
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
     AuthModule,
+    AdminAuthModule,
     MulterModule.register(multerConfig),
     ServeStaticModule.forRoot({
     rootPath: join(__dirname, '..', 'uploads'),

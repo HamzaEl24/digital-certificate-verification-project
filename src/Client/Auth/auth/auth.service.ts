@@ -40,17 +40,10 @@ export class AuthService {
   }
   
 
-  async login(payload: any): Promise<{ token: string; client: Client }> {
+  async login(payload: any): Promise<{ token: string}> {
     const token = this.jwtService.sign(payload);
   
-    // Met à jour le token dans la base de données
-    const client = await this.clientModel.findById(payload.id);
-    if (client) {
-      client.token = token; 
-      await client.save();
-    }
-  
-    return { token, client };
+    return { token};
   }
   
 }
