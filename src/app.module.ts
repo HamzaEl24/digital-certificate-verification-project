@@ -9,6 +9,7 @@ import { RegisterModule } from './Client/Enregistrer/register.module';
 
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CertificatesModule } from './certificates/certificates.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,6 +23,7 @@ import { join } from 'path';
     exclude: ['/*'],
     }),
     RegisterModule,
+    CertificatesModule,
   ],
 })
 export class AppModule {}
