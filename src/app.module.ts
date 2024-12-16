@@ -10,6 +10,8 @@ import { RegisterModule } from './Client/Enregistrer/register.module';
 import { AdminAuthModule } from './Admin/AuthAdmin/auth.module'; 
 
 import { ServeStaticModule } from '@nestjs/serve-static';
+
+import { ValidationModule } from './AutreUtilisateurs/Validation/validation.module'
 import { join } from 'path';
 @Module({
   imports: [
@@ -24,8 +26,12 @@ import { join } from 'path';
     rootPath: join(__dirname, '..', 'uploads'),
     exclude: ['/*'],
     }),
-    RegisterModule,
+    
+    ValidationModule,
+    
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
 
