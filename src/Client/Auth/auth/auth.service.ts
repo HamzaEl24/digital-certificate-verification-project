@@ -1,33 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
-import {Client, ClientDocument } from '../../shema/client.schema';
+import {IClient, ClientSchema } from '../../schema/client.schema';
+
+
 
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(Client.name) private readonly clientModel: Model<ClientDocument>,
+    @InjectModel('Client') private readonly clientModel: Model<IClient>,
     private readonly jwtService: JwtService
   ) {}
 
-  async findClientByEmail(email: string): Promise<Client | null> {
+  async findClientByEmail(email: string): Promise<IClient | null> {
     return this.clientModel.findOne({ email }).exec();
   }
 
   
 
-  async validateClient(email: string, password: string): Promise<{ isValid: boolean; client?: Client; message?: string }> {
+  async validateClient(email: string, password: string): Promise<{ isValid: boolean; client?: IClient; message?: string }> {
     const client = await this.findClientByEmail(email);
   
     if (!client) {
       return { isValid: false, message: 'Client not found' };
     }
   
-    const isPasswordValid = await bcrypt.compare(password, client.password);
+    const isPasswordValid = await bcrypt.compare(password, client.passwordHash);
     if (!isPasswordValid) {
       return { isValid: false, message: 'Invalid password' };
     }
@@ -40,10 +42,15 @@ export class AuthService {
   }
   
 
-  async login(payload: any): Promise<{ token: string}> {
-    const token = this.jwtService.sign(payload);
+  async login(payload: IClient): Promise<{ token: string }> {
+    const {_id, email, name } = payload;  // Correct destructuring from the payload
+    const token = this.jwtService.sign({
+      sub: _id.toString(),  // Convert _id to string if necessary
+      email: email,
+      name: name,
+    });
   
-    return { token};
+    return { token };
   }
   
 }

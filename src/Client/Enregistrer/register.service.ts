@@ -2,17 +2,17 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import {Client, ClientDocument } from '../../Client/shema/client.schema';
+import {IClient } from '../schema/client.schema';
 
 
 @Injectable()
 export class RegisterService {
   constructor(
-    @InjectModel(Client.name) private readonly clientModel: Model<ClientDocument>,
+    @InjectModel('Client') private readonly clientModel: Model<IClient>,
   ) {}
 
-  async registerClient(data: any, files: any): Promise<Client> {
-    const { name, email, password, phone, type } = data;
+  async registerClient(data: any, files: any): Promise<IClient> {
+    const { name, email, passwordHash, phone, type } = data;
 
     // Vérifiez si l'email est déjà utilisé
     const existingClient = await this.clientModel.findOne({ email });
@@ -21,7 +21,7 @@ export class RegisterService {
     }
 
     // Hachez le mot de passe
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(passwordHash, 10);
 
    
     // Traitement des fichiers justificatifs
@@ -36,7 +36,7 @@ export class RegisterService {
     const newClient = new this.clientModel({
       name,
       email,
-      password: hashedPassword,
+      passwordHash: hashedPassword,
       phone,
       type,
       legalDocuments,

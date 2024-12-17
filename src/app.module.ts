@@ -27,8 +27,9 @@ import { CertificatesModule } from './certificates/certificates.module';
     rootPath: join(__dirname, '..', 'uploads'),
     exclude: ['/*'],
     }),
-        
-   
+            
+    RegisterModule,
+    CertificatesModule,
     RegisterModule,
     CertificatesModule,
   ],
