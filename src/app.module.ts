@@ -13,7 +13,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { ValidationModule } from './AutreUtilisateurs/Validation/validation.module'
 import { join } from 'path';
-import { CertificatesModule } from './certificates/certificates.module';
+import { CertificateModule } from './certificates/certificates.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,9 +29,9 @@ import { CertificatesModule } from './certificates/certificates.module';
     }),
             
     RegisterModule,
-    CertificatesModule,
+    CertificateModule,
     RegisterModule,
-    CertificatesModule,
+    CertificateModule,
   ],
   controllers: [],
   providers: [],

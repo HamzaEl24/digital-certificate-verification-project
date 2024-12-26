@@ -1,35 +1,47 @@
-// src/certificates/certificates.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+// import { Certificate, CertificateDocument } from './certificate.schema';
+import { v4 as uuidv4 } from 'uuid';
 import * as QRCode from 'qrcode';
+import { Certificate, CertificateDocument } from './shemas/certificate.schema';
 
 @Injectable()
-export class CertificatesService {
-  async processList(people: { name: string; email: string }[], issuedBy: string) {
-    const certificates = [];
+export class CertificateService {
+  constructor(
+    @InjectModel(Certificate.name) private readonly certificateModel: Model<CertificateDocument>,
+  ) {}
 
-    for (const person of people) {
-      const uniqueId = this.generateUniqueId();
-      const qrCode = await this.generateQrCode(uniqueId);
+  async generateCertificates(clientId: string, individuals: { name: string; email: string }[]) {
+    const certificates = await Promise.all(
+      individuals.map(async (individual) => {
+        const uniqueId = uuidv4();
+        const qrCodeUrl = await QRCode.toDataURL(`http://localhost:3000/verify/${uniqueId}`);
+        const certificate = new this.certificateModel({
+          clientId,
+          uniqueId,
+          qrCodeUrl,
+          name: individual.name,
+          email: individual.email,
+          isCertified: true,
+        });
 
-      const certificate = {
-        name: person.name,
-        email: person.email,
-        issuedBy,
-        uniqueId,
-        qrCode,
-      };
+        return certificate.save();
+      }),
+    );
 
-      certificates.push(certificate);
+    return certificates;
+  }
+
+  async verifyCertificate(uniqueId: string) {
+    const certificate = await this.certificateModel.findOne({ uniqueId });
+    if (!certificate) {
+      throw new NotFoundException('Certificate not found or invalid');
     }
 
-    return certificates; // À envoyer au client ou enregistrer en DB
-  }
-
-  private generateUniqueId(): string {
-    return Math.random().toString(36).substring(2, 10).toUpperCase(); // Exemple : ID aléatoire
-  }
-
-  private async generateQrCode(data: string): Promise<string> {
-    return QRCode.toDataURL(data);
+    return {
+      message: certificate.isCertified ? 'Certified' : 'Not Certified',
+      details: certificate.isCertified ? certificate : null,
+    };
   }
 }

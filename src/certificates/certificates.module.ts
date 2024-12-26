@@ -1,10 +1,17 @@
-// src/certificates/certificates.module.ts
 import { Module } from '@nestjs/common';
-import { CertificatesController } from './certificates.controller';
-import { CertificatesService } from './certificates.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Certificate, CertificateSchema } from './shemas/certificate.schema';
+import { CertificateController } from './certificates.controller';
+import { CertificateService } from './certificates.service';
+// import { CertificateController } from './certificate.controller';
+// import { CertificateService } from './certificate.service';
+// import { Certificate, CertificateSchema } from './certificate.schema';
 
 @Module({
-  controllers: [CertificatesController],
-  providers: [CertificatesService],
+  imports: [
+    MongooseModule.forFeature([{ name: Certificate.name, schema: CertificateSchema }]),
+  ],
+  controllers: [CertificateController],
+  providers: [CertificateService],
 })
-export class CertificatesModule {}
+export class CertificateModule {}
