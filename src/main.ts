@@ -7,7 +7,7 @@ import * as fs from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: new Logger() });
-
+  
    // Vérifier si le dossier uploads existe, sinon le créer
    const uploadPath = join(__dirname, '../uploads/documents');
    if (!fs.existsSync(uploadPath)) {

@@ -8,15 +8,15 @@ export class VerificationClientController {
     constructor(private readonly verificationClientService: VerificationClientService) {}
 
     // Récupère tous les clients inactifs
-    @Get('inactiveClients')
-    @UseGuards(JwtAuthGuard)
+    @Get('inactifeClients')
+    @UseGuards(new JwtAuthGuard(['admin']))
     async getInactiveClients(): Promise<IClient[]> {
         return this.verificationClientService.getInactiveClients();
     }
 
     // Valide un document d'un client
     @Post('validateDocument')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(new JwtAuthGuard(['admin']))
     async validateDocument(
         @Body() body: { clientId: string; documentName: string }
     ): Promise<string> {

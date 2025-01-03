@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Request, SetMetadata } from '@nestjs/common';
 import { AdminAuthService } from './auth.service';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { LoginDto} from './dto/login.dto';
@@ -18,9 +18,10 @@ export class AdminAuthController {
     return this.authService.login(loginDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(new JwtAuthGuard(['admin']))  // Seulement les admins peuvent accéder à ce profil
   @Get('profile')
-  async getProfile(@Request() req) {
-    return req.user; 
+  getProfile(@Request() req) {
+    return req.user;
   }
+
 }

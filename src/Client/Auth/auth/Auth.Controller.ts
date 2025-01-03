@@ -1,7 +1,6 @@
 import { Controller, Post, Body, Get, UseGuards, Request, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { IClient } from 'src/Client/schema/client.schema';
 import { LoginDto } from './DTO';
 @Controller('auth')
 export class AuthController {
@@ -13,7 +12,7 @@ export class AuthController {
     const validation = await this.authService.validateClient(loginData.email, loginData.password);
     
     if (!validation.isValid) {
-      throw new BadRequestException(validation.message);
+      return validation.message
     }
 
     
@@ -25,7 +24,7 @@ export class AuthController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(new JwtAuthGuard(['client']))
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

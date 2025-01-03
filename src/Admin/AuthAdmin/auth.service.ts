@@ -29,16 +29,17 @@ export class AdminAuthService {
     if (!admin) {
       throw new UnauthorizedException('Invalid credentials');
     }
-
+  
     const isPasswordValid = await bcrypt.compare(password, admin.passwordHash);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
-
-    const payload = { sub: admin._id, email: admin.email };
+  
+    const payload = { sub: admin._id, email: admin.email, name: admin.name, role: 'admin' };  // Role défini
     const accessToken = this.jwtService.sign(payload);
     return { accessToken };
   }
+  
 
   async validateAdmin(adminId: string): Promise<IAdmin> {
     return this.AdminModel.findById(adminId);
