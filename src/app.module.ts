@@ -14,6 +14,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ValidationModule } from './AutreUtilisateurs/Validation/validation.module'
 import { join } from 'path';
 import { CertificateModule } from './certificates/certificates.module';
+import { VerificationClientModule } from './Admin/VerificationClient/verificationClient.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -32,6 +33,8 @@ import { CertificateModule } from './certificates/certificates.module';
     CertificateModule,
     RegisterModule,
     CertificateModule,
+    VerificationClientModule,
+    
   ],
   controllers: [],
   providers: [],

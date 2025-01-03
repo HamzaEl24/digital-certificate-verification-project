@@ -2,9 +2,6 @@ import { Controller, Post, Body, UseGuards, Request, Get, Param } from '@nestjs/
 import { CertificateService } from './certificates.service';
 import { JwtAuthGuard } from 'src/Client/Auth/guards/jwt-auth.guard';
 import { CreateCertificatesDto } from './dto/submit-list.dto';
-// import { CertificateService } from './certificate.service';
-// import { CreateCertificatesDto } from './create-certificates.dto';
-// import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('certificates')
 export class CertificateController {
@@ -23,6 +20,7 @@ export class CertificateController {
 
   @Get('verify/:uniqueId')
   async verifyCertificate(@Param('uniqueId') uniqueId: string) {
+    // Vérification avec le uniqueId uniquement
     const result = await this.certificateService.verifyCertificate(uniqueId);
     return result;
   }

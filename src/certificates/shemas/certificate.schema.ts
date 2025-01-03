@@ -20,6 +20,9 @@ export class Certificate {
   @Prop({ required: true })
   email: string;
 
+  @Prop({ required: true })
+  cause: string;
+
   @Prop({ default: false })
   isCertified: boolean;
 
