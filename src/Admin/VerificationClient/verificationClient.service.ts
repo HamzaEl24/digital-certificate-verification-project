@@ -9,7 +9,7 @@ export class VerificationClientService {
         @InjectModel('Client') private readonly clientModel: Model<IClient>,
     ) {}
 
-    // Met à jour le statut d'un document spécifique
+    //Mise à jour le statut d'un document spécifique
     async updateDocumentStatus(clientId: string, documentName: string): Promise<string> {
         const client = await this.clientModel.findById(clientId).exec();
 
@@ -27,11 +27,11 @@ export class VerificationClientService {
             return `Le document ${document.documentName} est déjà validé.`;
         }
 
-        // Mettre à jour le statut du document
+        //Mettre à jour le statut du document
         document.validated = true;
         await client.save();
 
-        // Vérifier si tous les documents sont validés
+        // Vérification si tous les documents sont validés
         const allDocumentsValid = client.legalDocuments.every(doc => doc.validated);
 
         if (allDocumentsValid) {
@@ -43,7 +43,7 @@ export class VerificationClientService {
         return `Le document ${document.documentName} est validé, mais d'autres documents restent à valider.`;
     }
 
-        // Récupère tous les clients inactifs et vérifie leur statut
+        //Récupèration de tous les clients inactifs et vérification de leur statut
         async getInactiveClients(): Promise<IClient[]> {
             return this.clientModel.find({ status: 'inactive' }).exec();
         }

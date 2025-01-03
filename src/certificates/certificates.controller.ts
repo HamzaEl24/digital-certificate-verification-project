@@ -7,7 +7,7 @@ import { CreateCertificatesDto } from './dto/submit-list.dto';
 export class CertificateController {
   constructor(private readonly certificateService: CertificateService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(new JwtAuthGuard(['client']))
   @Post('generate')
   async generateCertificates(@Body() dto: CreateCertificatesDto, @Request() req) {
     const clientId = req.user.id;

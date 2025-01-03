@@ -1,17 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from './Client/Auth/auth/auth.module';
+import { ClientAuthModule } from './Client/Auth/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 
 import { MulterModule } from '@nestjs/platform-express';
 import { multerConfig } from './Client/Enregistrer/multer.config';
 import { RegisterModule } from './Client/Enregistrer/register.module';
-
-import { AdminAuthModule } from './Admin/AuthAdmin/auth.module'; 
-
+import { AdminAuthModule } from './Admin/AuthAdmin/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-
-import { ValidationModule } from './AutreUtilisateurs/Validation/validation.module'
 import { join } from 'path';
 import { CertificateModule } from './certificates/certificates.module';
 import { VerificationClientModule } from './Admin/VerificationClient/verificationClient.module';
@@ -21,7 +17,7 @@ import { VerificationClientModule } from './Admin/VerificationClient/verificatio
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_URI),
-    AuthModule,
+    ClientAuthModule,
     AdminAuthModule,
     MulterModule.register(multerConfig),
     ServeStaticModule.forRoot({
@@ -29,12 +25,16 @@ import { VerificationClientModule } from './Admin/VerificationClient/verificatio
     exclude: ['/*'],
     }),
             
-    RegisterModule,
+    
     CertificateModule,
     RegisterModule,
+<<<<<<< HEAD
     CertificateModule,
     VerificationClientModule,
     
+=======
+    VerificationClientModule
+>>>>>>> Ayoub2
   ],
   controllers: [],
   providers: [],

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
-import {IClient, ClientSchema } from '../../schema/client.schema';
+import {IClient } from '../../schema/client.schema';
 
 
 
@@ -31,7 +31,7 @@ export class AuthService {
   
     const isPasswordValid = await bcrypt.compare(password, client.passwordHash);
     if (!isPasswordValid) {
-      return { isValid: false, message: 'Invalid password' };
+      return { isValid: false, message: 'Invalid email or password' };
     }
   
     if (client.status === 'inactive') {
@@ -45,9 +45,10 @@ export class AuthService {
   async login(payload: IClient): Promise<{ token: string }> {
     const {_id, email, name } = payload;  // Correct destructuring from the payload
     const token = this.jwtService.sign({
-      sub: _id.toString(),  // Convert _id to string if necessary
+      sub: _id.toString(),  
       email: email,
       name: name,
+      role: 'client'
     });
   
     return { token };

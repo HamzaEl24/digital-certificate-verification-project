@@ -13,7 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [
     MongooseModule.forFeature([{ name: 'Client', schema: ClientSchema }]),
     JwtModule.register({
-      secret: 'azert1234', 
+      secret: '1234azert', 
       signOptions: { expiresIn: '30d' }, 
     }),
   ],
@@ -21,7 +21,7 @@ import { JwtModule } from '@nestjs/jwt';
   controllers: [AuthController],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class ClientAuthModule {}
 
 
 
